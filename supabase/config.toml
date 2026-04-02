@@ -1,0 +1,73 @@
+project_id = "emzmjjifbequnjqjyuxu"
+
+[functions.admin-create-user]
+verify_jwt = false
+
+[functions.admin-delete-user]
+verify_jwt = false
+
+[functions.admin-update-secret]
+verify_jwt = false
+
+[functions.sync-legacy-user]
+verify_jwt = false
+
+[functions.sync-user-data]
+verify_jwt = false
+
+[functions.init-test-users]
+verify_jwt = false
+
+[functions.send-reminders]
+verify_jwt = false
+
+[functions.send-family-notification]
+verify_jwt = false
+
+[functions.send-goal-reminders]
+verify_jwt = false
+
+[functions.wa-webhook]
+verify_jwt = false
+
+[functions.agent-router]
+verify_jwt = false
+
+[functions.wa-send]
+verify_jwt = false
+
+[functions.evolution-health]
+verify_jwt = false
+
+[functions.queue-worker]
+verify_jwt = false
+
+[functions.evolution-instance-create]
+verify_jwt = false
+
+[functions.evolution-connect]
+verify_jwt = false
+
+[functions.evolution-status]
+verify_jwt = false
+
+[functions.evolution-set-webhook]
+verify_jwt = false
+
+[functions.evolution-logout]
+verify_jwt = false
+
+[functions.ai-engine]
+verify_jwt = false
+
+[functions.morning-reminders]
+verify_jwt = false
+
+[functions.vision-service]
+verify_jwt = false
+
+[functions.reprocess-missed-transactions]
+verify_jwt = false
+
+[functions.delete-user-account]
+verify_jwt = false

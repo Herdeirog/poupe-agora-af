@@ -1,0 +1,761 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   DESIGN SYSTEM - PALETA DE CORES HSL
+   Suporte completo para modo claro e escuro
+   ======================================== */
+
+@layer base {
+  /* ========================================
+     MODO CLARO (Light Theme)
+     ======================================== */
+  :root {
+    /* Base - Branco acinzentado elegante */
+    --background: 210 20% 98%;
+    --foreground: 220 16% 12%;
+
+    /* Cards - Branco puro com elevação */
+    --card: 0 0% 100%;
+    --card-foreground: 220 16% 12%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 16% 12%;
+
+    /* Primary - Verde esmeralda premium */
+    --primary: 160 84% 39%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary */
+    --secondary: 214 20% 96%;
+    --secondary-foreground: 220 16% 12%;
+
+    /* Muted - Texto secundário com bom contraste */
+    --muted: 214 20% 96%;
+    --muted-foreground: 220 12% 40%;
+
+    /* Accent */
+    --accent: 214 20% 96%;
+    --accent-foreground: 220 16% 12%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders - Mais visíveis para contraste */
+    --border: 214 20% 82%;
+    --input: 214 20% 82%;
+    --ring: 160 84% 39%;
+    
+    /* Input background específico */
+    --input-background: 0 0% 100%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar Light */
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 220 16% 12%;
+    --sidebar-primary: 160 84% 39%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 20% 94%;
+    --sidebar-accent-foreground: 220 16% 12%;
+    --sidebar-border: 214 20% 88%;
+    --sidebar-ring: 160 84% 39%;
+
+    /* Admin/User Light specific */
+    --admin-success: 160 84% 39%;
+    --admin-success-foreground: 0 0% 100%;
+    --admin-warning: 38 92% 50%;
+    --admin-warning-foreground: 0 0% 0%;
+    --admin-info: 217 91% 60%;
+    --admin-info-foreground: 0 0% 100%;
+
+    /* Glass variables for Light mode */
+    --glass-bg: 0 0% 100% / 0.7;
+    --glass-bg-strong: 0 0% 100% / 0.85;
+    --glass-bg-card: 0 0% 100% / 0.6;
+    --glass-border: 220 16% 12% / 0.08;
+    --glass-border-strong: 220 16% 12% / 0.12;
+    --glass-shadow: 220 16% 12% / 0.1;
+
+    /* Badge variables for Light mode */
+    --badge-income-bg: 160 84% 39% / 0.12;
+    --badge-income-text: 160 84% 30%;
+    --badge-income-border: 160 84% 39% / 0.25;
+
+    --badge-expense-bg: 0 84% 60% / 0.12;
+    --badge-expense-text: 0 70% 45%;
+    --badge-expense-border: 0 84% 60% / 0.25;
+
+    --badge-warning-bg: 38 92% 50% / 0.12;
+    --badge-warning-text: 38 80% 35%;
+    --badge-warning-border: 38 92% 50% / 0.25;
+
+    --badge-info-bg: 217 91% 60% / 0.12;
+    --badge-info-text: 217 70% 45%;
+    --badge-info-border: 217 91% 60% / 0.25;
+
+    --badge-success-bg: 160 84% 39% / 0.12;
+    --badge-success-text: 160 84% 30%;
+    --badge-success-border: 160 84% 39% / 0.25;
+
+    --badge-inactive-bg: 220 12% 40% / 0.08;
+    --badge-inactive-text: 220 12% 50%;
+    --badge-inactive-border: 220 12% 40% / 0.15;
+
+    --badge-cancel-bg: 0 84% 60% / 0.12;
+    --badge-cancel-text: 0 70% 45%;
+    --badge-cancel-border: 0 84% 60% / 0.25;
+
+    --badge-trial-bg: 45 100% 51% / 0.12;
+    --badge-trial-text: 45 80% 35%;
+    --badge-trial-border: 45 100% 51% / 0.25;
+
+    --badge-premium-bg: 220 16% 12% / 0.08;
+    --badge-premium-text: 220 16% 25%;
+    --badge-premium-border: 220 16% 12% / 0.15;
+
+    /* Sidebar gradient light */
+    --sidebar-gradient-from: 210 20% 98%;
+    --sidebar-gradient-to: 214 20% 96%;
+
+    /* Table light */
+    --table-row-hover: 214 20% 96%;
+    --table-row-stripe: 214 20% 98%;
+    --table-border: 214 20% 90%;
+
+    /* Landing Page - User specific colors (fallback for light) */
+    --user-bg-primary: 220 16% 9%;
+    --user-bg-secondary: 220 14% 12%;
+    --user-bg-glass: 0 0% 100% / 0.06;
+    --user-text-primary: 210 20% 98%;
+    --user-text-secondary: 215 16% 65%;
+    --user-border-glass: 0 0% 100% / 0.12;
+    --user-accent: 160 84% 45%;
+  }
+
+  /* ========================================
+     MODO ESCURO (Dark Theme) - Refinado
+     ======================================== */
+  .dark {
+    /* Base - Slate sofisticado */
+    --background: 220 16% 9%;
+    --foreground: 210 20% 98%;
+
+    /* Landing Page - User specific colors (always dark) */
+    --user-bg-primary: 220 16% 9%;
+    --user-bg-secondary: 220 14% 12%;
+    --user-bg-glass: 0 0% 100% / 0.06;
+    --user-text-primary: 210 20% 98%;
+    --user-text-secondary: 215 16% 65%;
+    --user-border-glass: 0 0% 100% / 0.12;
+    --user-accent: 160 84% 45%;
+
+    /* Cards - Elevação visual */
+    --card: 220 14% 12%;
+    --card-foreground: 210 20% 98%;
+
+    /* Popover */
+    --popover: 220 14% 12%;
+    --popover-foreground: 210 20% 98%;
+
+    /* Primary - Verde esmeralda vibrante */
+    --primary: 160 84% 45%;
+    --primary-foreground: 220 16% 9%;
+
+    /* Secondary */
+    --secondary: 220 12% 16%;
+    --secondary-foreground: 210 20% 98%;
+
+    /* Muted - CONTRASTE MELHORADO */
+    --muted: 220 12% 18%;
+    --muted-foreground: 215 16% 65%;
+
+    /* Accent */
+    --accent: 220 12% 16%;
+    --accent-foreground: 210 20% 98%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 20% 98%;
+
+    /* Borders - Mais visíveis para contraste */
+    --border: 220 12% 25%;
+    --input: 220 12% 22%;
+    --ring: 160 84% 45%;
+    
+    /* Input background específico */
+    --input-background: 220 14% 14%;
+
+    /* Sidebar Dark */
+    --sidebar-background: 220 16% 8%;
+    --sidebar-foreground: 210 20% 98%;
+    --sidebar-primary: 160 84% 45%;
+    --sidebar-primary-foreground: 220 16% 9%;
+    --sidebar-accent: 220 12% 14%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 220 12% 18%;
+    --sidebar-ring: 160 84% 45%;
+
+    /* Admin/User Dark specific */
+    --admin-success: 160 84% 45%;
+    --admin-success-foreground: 220 16% 9%;
+    --admin-warning: 38 92% 50%;
+    --admin-warning-foreground: 0 0% 0%;
+    --admin-info: 217 91% 60%;
+    --admin-info-foreground: 0 0% 100%;
+
+    /* Glass variables for Dark mode */
+    --glass-bg: 0 0% 100% / 0.06;
+    --glass-bg-strong: 0 0% 100% / 0.1;
+    --glass-bg-card: 0 0% 100% / 0.04;
+    --glass-border: 0 0% 100% / 0.12;
+    --glass-border-strong: 0 0% 100% / 0.18;
+    --glass-shadow: 0 0% 0% / 0.35;
+
+    /* Badge variables for Dark mode */
+    --badge-income-bg: 160 84% 45% / 0.15;
+    --badge-income-text: 160 84% 65%;
+    --badge-income-border: 160 84% 45% / 0.3;
+
+    --badge-expense-bg: 0 85% 65% / 0.15;
+    --badge-expense-text: 0 85% 70%;
+    --badge-expense-border: 0 85% 65% / 0.3;
+
+    --badge-warning-bg: 38 90% 55% / 0.15;
+    --badge-warning-text: 38 90% 65%;
+    --badge-warning-border: 38 90% 55% / 0.3;
+
+    --badge-info-bg: 210 90% 65% / 0.15;
+    --badge-info-text: 210 90% 70%;
+    --badge-info-border: 210 90% 65% / 0.3;
+
+    --badge-success-bg: 160 84% 45% / 0.15;
+    --badge-success-text: 160 84% 65%;
+    --badge-success-border: 160 84% 45% / 0.3;
+
+    --badge-inactive-bg: 0 0% 100% / 0.05;
+    --badge-inactive-text: 215 16% 55%;
+    --badge-inactive-border: 0 0% 100% / 0.1;
+
+    --badge-cancel-bg: 0 100% 67% / 0.15;
+    --badge-cancel-text: 0 100% 72%;
+    --badge-cancel-border: 0 100% 67% / 0.3;
+
+    --badge-trial-bg: 45 100% 51% / 0.15;
+    --badge-trial-text: 45 100% 60%;
+    --badge-trial-border: 45 100% 51% / 0.3;
+
+    --badge-premium-bg: 0 0% 100% / 0.1;
+    --badge-premium-text: 210 20% 98%;
+    --badge-premium-border: 0 0% 100% / 0.2;
+
+    /* Sidebar gradient dark */
+    --sidebar-gradient-from: 220 16% 10%;
+    --sidebar-gradient-to: 220 16% 8%;
+
+    /* Table dark */
+    --table-row-hover: 0 0% 100% / 0.04;
+    --table-row-stripe: 0 0% 100% / 0.02;
+    --table-border: 0 0% 100% / 0.06;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* ========================================
+   PREMIUM GLASSMORPHISM UTILITIES (Adaptativo)
+   ======================================== */
+@layer components {
+  /* Base Glass Effect - Adaptativo */
+  .glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid hsl(var(--glass-border));
+    border-radius: 14px;
+    box-shadow: 0 4px 24px hsl(var(--glass-shadow));
+  }
+
+  .glass-strong {
+    background: hsl(var(--glass-bg-strong));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border-strong));
+    border-radius: 18px;
+    box-shadow: 0 8px 32px hsl(var(--glass-shadow));
+  }
+
+  .glass-card {
+    background: hsl(var(--glass-bg-card));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--glass-border));
+    border-radius: 12px;
+    box-shadow: 0 4px 24px hsl(var(--glass-shadow));
+  }
+
+  .glass-sidebar {
+    background: hsl(var(--sidebar-background));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-right: 1px solid hsl(var(--sidebar-border));
+  }
+
+  .glass-topbar {
+    background: hsl(var(--background) / 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid hsl(var(--border));
+  }
+
+  .glass-input {
+    background: hsl(var(--glass-bg-card));
+    border: 1px solid hsl(var(--glass-border));
+    border-radius: 10px;
+    transition: all 0.25s ease;
+  }
+
+  .glass-input:focus {
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 0 2px hsl(var(--primary) / 0.15);
+  }
+
+  .glass-hover {
+    transition: all 0.25s ease;
+  }
+
+  .glass-hover:hover {
+    background: hsl(var(--glass-bg-strong));
+    box-shadow: 0 0 16px hsl(var(--primary) / 0.15);
+  }
+
+  /* ========================================
+     GREEN GLOW EFFECTS (Adaptativo)
+     ======================================== */
+  .green-glow {
+    box-shadow: 0 0 24px hsl(var(--primary) / 0.35);
+  }
+
+  .green-glow-sm {
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.25);
+  }
+
+  .green-glow-hover:hover {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+  }
+
+  /* ========================================
+     PREMIUM PROGRESS BAR (Adaptativo)
+     ======================================== */
+  .progress-premium {
+    background: hsl(var(--muted));
+    border-radius: 8px;
+    height: 8px;
+    overflow: hidden;
+  }
+
+  .progress-premium-fill {
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+    border-radius: 8px;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.5);
+  }
+
+  /* ========================================
+     PREMIUM BADGE STYLES (Adaptativo)
+     ======================================== */
+  .badge-premium {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .badge-income {
+    background: hsl(var(--badge-income-bg));
+    color: hsl(var(--badge-income-text));
+    border: 1px solid hsl(var(--badge-income-border));
+  }
+
+  .badge-expense {
+    background: hsl(var(--badge-expense-bg));
+    color: hsl(var(--badge-expense-text));
+    border: 1px solid hsl(var(--badge-expense-border));
+  }
+
+  .badge-warning {
+    background: hsl(var(--badge-warning-bg));
+    color: hsl(var(--badge-warning-text));
+    border: 1px solid hsl(var(--badge-warning-border));
+  }
+
+  .badge-info {
+    background: hsl(var(--badge-info-bg));
+    color: hsl(var(--badge-info-text));
+    border: 1px solid hsl(var(--badge-info-border));
+  }
+
+  .badge-ativo {
+    background: hsl(var(--badge-success-bg));
+    color: hsl(var(--badge-success-text));
+    border: 1px solid hsl(var(--badge-success-border));
+  }
+
+  .badge-inativo {
+    background: hsl(var(--badge-inactive-bg));
+    color: hsl(var(--badge-inactive-text));
+    border: 1px solid hsl(var(--badge-inactive-border));
+  }
+
+  .badge-cancelado {
+    background: hsl(var(--badge-cancel-bg));
+    color: hsl(var(--badge-cancel-text));
+    border: 1px solid hsl(var(--badge-cancel-border));
+  }
+
+  .badge-trial {
+    background: hsl(var(--badge-trial-bg));
+    color: hsl(var(--badge-trial-text));
+    border: 1px solid hsl(var(--badge-trial-border));
+  }
+
+  .badge-suspenso {
+    background: hsl(var(--badge-warning-bg));
+    color: hsl(var(--badge-warning-text));
+    border: 1px solid hsl(var(--badge-warning-border));
+  }
+
+  .badge-premium-style {
+    background: hsl(var(--badge-premium-bg));
+    color: hsl(var(--badge-premium-text));
+    border: 1px solid hsl(var(--badge-premium-border));
+  }
+
+  .badge-mensal {
+    background: hsl(166 100% 70% / 0.12);
+    color: hsl(166 100% 40%);
+    border: 1px solid hsl(166 100% 70% / 0.25);
+  }
+
+  .dark .badge-mensal {
+    color: hsl(166 100% 70%);
+  }
+
+  .badge-anual {
+    background: hsl(51 100% 50% / 0.12);
+    color: hsl(51 80% 35%);
+    border: 1px solid hsl(51 100% 50% / 0.25);
+  }
+
+  .dark .badge-anual {
+    color: hsl(51 100% 50%);
+  }
+
+  .badge-gratuito {
+    background: hsl(var(--badge-inactive-bg));
+    color: hsl(var(--badge-inactive-text));
+    border: 1px solid hsl(var(--badge-inactive-border));
+  }
+
+  /* ========================================
+     PREMIUM BUTTON STYLES (Adaptativo)
+     ======================================== */
+  .btn-premium {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.85));
+    color: hsl(0 0% 100%);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+    border: none;
+    box-shadow: 0 4px 16px hsl(var(--primary) / 0.25);
+  }
+
+  .btn-premium:hover {
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.75));
+    box-shadow: 0 6px 24px hsl(var(--primary) / 0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-glass {
+    background: hsl(0 0% 100% / 0.12);
+    border: 1px solid hsl(var(--primary) / 0.5);
+    color: hsl(var(--primary));
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+  }
+
+  .btn-glass:hover {
+    background: hsl(var(--primary) / 0.15);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 0 16px hsl(var(--primary) / 0.25);
+  }
+
+  /* ========================================
+     PREMIUM ANIMATIONS
+     ======================================== */
+  .fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  .scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .slide-in-left {
+    animation: slideInLeft 0.4s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* ========================================
+     PREMIUM TABLE STYLES (Adaptativo)
+     ======================================== */
+  .table-premium {
+    background: hsl(var(--card));
+  }
+
+  .table-premium thead {
+    background: hsl(var(--muted));
+  }
+
+  .table-premium tbody tr {
+    transition: background 0.2s ease;
+    border-bottom: 1px solid hsl(var(--table-border));
+  }
+
+  .table-premium tbody tr:hover {
+    background: hsl(var(--table-row-hover));
+  }
+
+  .table-premium tbody tr:nth-child(even) {
+    background: hsl(var(--table-row-stripe));
+  }
+
+  /* ========================================
+     PREMIUM SIDEBAR STYLES (Adaptativo)
+     ======================================== */
+  .sidebar-premium {
+    background: linear-gradient(180deg, hsl(var(--sidebar-gradient-from)), hsl(var(--sidebar-gradient-to)));
+    border-right: 1px solid hsl(var(--sidebar-border));
+  }
+
+  .sidebar-item-active {
+    background: hsl(var(--primary) / 0.12);
+    border-left: 3px solid hsl(var(--primary));
+    color: hsl(var(--primary));
+    box-shadow: 0 0 16px hsl(var(--primary) / 0.15);
+  }
+
+  .sidebar-item-hover:hover {
+    background: hsl(var(--accent));
+    border-left: 3px solid hsl(var(--primary) / 0.4);
+  }
+
+  /* ========================================
+     ICON CIRCLE STYLES (Adaptativo)
+     ======================================== */
+  .icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--glass-bg));
+    border: 1px solid hsl(var(--glass-border));
+  }
+
+  .icon-circle-success {
+    background: hsl(var(--badge-success-bg));
+    border-color: hsl(var(--badge-success-border));
+    color: hsl(var(--badge-success-text));
+  }
+
+  .icon-circle-danger {
+    background: hsl(var(--badge-expense-bg));
+    border-color: hsl(var(--badge-expense-border));
+    color: hsl(var(--badge-expense-text));
+  }
+
+  .icon-circle-warning {
+    background: hsl(var(--badge-warning-bg));
+    border-color: hsl(var(--badge-warning-border));
+    color: hsl(var(--badge-warning-text));
+  }
+
+  .icon-circle-info {
+    background: hsl(var(--badge-info-bg));
+    border-color: hsl(var(--badge-info-border));
+    color: hsl(var(--badge-info-text));
+  }
+
+  /* ========================================
+     SHADOW UTILITIES (Adaptativo)
+     ======================================== */
+  .shadow-premium {
+    box-shadow: 0 8px 24px hsl(var(--glass-shadow));
+  }
+
+  .shadow-premium-hover {
+    box-shadow: 0 12px 32px hsl(var(--glass-shadow));
+  }
+
+  .shadow-green-glow-sm {
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.2);
+  }
+
+  /* ========================================
+     PREMIUM CARD STYLES (Adaptativo)
+     ======================================== */
+  .card-premium {
+    background: hsl(var(--card));
+    backdrop-filter: blur(12px);
+    border: 1px solid hsl(var(--border));
+    border-radius: 16px;
+    box-shadow: 0 8px 24px hsl(var(--glass-shadow));
+    transition: all 0.3s ease;
+  }
+
+  .card-premium:hover {
+    border-color: hsl(var(--border));
+    box-shadow: 0 12px 32px hsl(var(--glass-shadow));
+  }
+
+  /* ========================================
+     VALUE HIGHLIGHT (Adaptativo)
+     ======================================== */
+  .value-highlight {
+    color: hsl(var(--primary));
+    font-weight: 700;
+  }
+
+  .value-danger {
+    color: hsl(var(--destructive));
+    font-weight: 700;
+  }
+
+  .value-warning {
+    color: hsl(var(--badge-warning-text));
+    font-weight: 700;
+  }
+
+  /* ========================================
+     ICON CIRCLE UTILITIES
+     ======================================== */
+  .icon-circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+  }
+
+  .icon-circle-success {
+    background: hsl(var(--primary) / 0.15);
+  }
+
+  .icon-circle-danger {
+    background: hsl(var(--destructive) / 0.15);
+  }
+
+  .icon-circle-warning {
+    background: hsl(var(--badge-warning-bg));
+  }
+
+  .icon-circle-info {
+    background: hsl(var(--badge-info-bg));
+  }
+
+  /* ========================================
+     PROGRESS FILL UTILITY
+     ======================================== */
+  .progress-fill {
+    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.4s ease;
+  }
+
+  /* ========================================
+     SHADOW UTILITIES (Green Glow)
+     ======================================== */
+  .shadow-green-glow {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.4);
+  }
+
+  .shadow-green-glow-sm {
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.3);
+  }
+
+  .shadow-premium {
+    box-shadow: 0 8px 32px hsl(0 0% 0% / 0.3);
+  }
+}
+
+/* Safe Area for iPhones with notch */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Touch pan for swipe gestures */
+.touch-pan-y {
+  touch-action: pan-y;
+}
