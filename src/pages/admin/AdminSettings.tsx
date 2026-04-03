@@ -203,10 +203,14 @@ export default function AdminSettings() {
         primaryColor: generalSettings.primaryColor,
       });
       toast.success("Configurações gerais salvas com sucesso!");
+      // Recarregar para confirmar que salvou
+      await loadBranding();
     } catch (error) {
-      toast.error("Erro ao salvar configurações gerais.");
+      console.error("Erro ao salvar configurações gerais:", error);
+      toast.error("Erro ao salvar configurações gerais. Verifique o console.");
     }
   };
+
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
