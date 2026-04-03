@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { brandingService } from "@/services/brandingService";
+import { settingsService } from "@/services/settingsService";
 import FeatureControlTable from "@/components/admin/FeatureControlTable";
 import PlanLimitsTable from "@/components/admin/PlanLimitsTable";
 import FamilyPlanLimitsTable from "@/components/admin/FamilyPlanLimitsTable";
@@ -101,14 +101,18 @@ export default function AdminSettings() {
     };
   }, [checkWhatsappStatus]);
 
+
   const loadBranding = async () => {
     try {
-      const [logoUrl, faviconUrl] = await Promise.all([
-        brandingService.getLogoUrl(),
-        brandingService.getFaviconUrl(),
-      ]);
-      if (logoUrl) setLogoPreview(logoUrl);
-      if (faviconUrl) setFaviconPreview(faviconUrl);
+      const whiteLabel = await settingsService.getWhiteLabelSettings();
+      setGeneralSettings({
+        platformName: whiteLabel.platformName || "Poupe Agora",
+        subdomain: whiteLabel.subdomain || "app",
+        logo: whiteLabel.logoUrl || "",
+        primaryColor: whiteLabel.primaryColor || "#00E676",
+      });
+      if (whiteLabel.logoUrl) setLogoPreview(whiteLabel.logoUrl);
+      if (whiteLabel.faviconUrl) setFaviconPreview(whiteLabel.faviconUrl);
     } catch (error) {
       console.error("Error loading branding:", error);
     }
@@ -189,8 +193,19 @@ export default function AdminSettings() {
     toast.success("Configurações de recursos salvas com sucesso!");
   };
 
-  const handleSaveGeneral = () => {
-    toast.success("Configurações gerais salvas com sucesso!");
+
+  const handleSaveGeneral = async () => {
+    try {
+      await settingsService.saveWhiteLabelSettings({
+        platformName: generalSettings.platformName,
+        subdomain: generalSettings.subdomain,
+        logoUrl: generalSettings.logo,
+        primaryColor: generalSettings.primaryColor,
+      });
+      toast.success("Configurações gerais salvas com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao salvar configurações gerais.");
+    }
   };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,7 +233,9 @@ export default function AdminSettings() {
     }
     setSavingLogo(true);
     try {
-      const url = await brandingService.uploadLogo(logoFile);
+      const url = await settingsService.uploadFile(logoFile, "logos");
+      await settingsService.saveWhiteLabelSettings({ logoUrl: url });
+      setGeneralSettings(prev => ({ ...prev, logo: url }));
       setLogoPreview(url);
       setLogoFile(null);
       toast.success("Logo salvo com sucesso! Atualize a página para ver as mudanças.");
@@ -237,7 +254,8 @@ export default function AdminSettings() {
     }
     setSavingFavicon(true);
     try {
-      const url = await brandingService.uploadFavicon(faviconFile);
+      const url = await settingsService.uploadFile(faviconFile, "favicons");
+      await settingsService.saveWhiteLabelSettings({ faviconUrl: url });
       setFaviconPreview(url);
       setFaviconFile(null);
       toast.success("Favicon salvo com sucesso! Atualize a página para ver as mudanças.");
