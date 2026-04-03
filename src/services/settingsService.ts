@@ -66,7 +66,7 @@ export const settingsService = {
       const { error } = await supabase.from('global_settings').upsert({
         key: 'white_label_settings',
         value: updated as any,
-      });
+      }, { onConflict: 'key' });
 
       if (error) throw error;
     } catch (error) {
@@ -106,7 +106,7 @@ export const settingsService = {
       const { error } = await supabase.from('global_settings').upsert({
         key: 'site_settings',
         value: updated as any,
-      });
+      }, { onConflict: 'key' });
 
       if (error) throw error;
     } catch (error) {
