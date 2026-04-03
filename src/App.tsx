@@ -9,6 +9,9 @@ import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import { useBranding } from "@/hooks/useBranding";
 
+// Auth Provider (centralizado - resolve bug de múltiplas instâncias)
+import { AuthProvider } from "@/contexts/AuthContext";
+
 // Currency Provider
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
@@ -90,6 +93,7 @@ function FaviconUpdater() {
 const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
+      <AuthProvider>
       <CurrencyProvider>
         <TooltipProvider>
           <Toaster />
@@ -166,6 +170,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
       </CurrencyProvider>
+      </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>
 );
