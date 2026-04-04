@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Wallet, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
+import { useBrandingContext } from "@/contexts/BrandingContext";
 
 const footerLinks = {
   produto: [
@@ -36,6 +37,7 @@ const socialLinks = [
 ];
 
 const Footer = () => {
+  const { platformName } = useBrandingContext();
   return (
     <footer className="relative py-16 border-t border-user-border-glass">
       <div className="absolute inset-0 bg-user-bg-secondary/30" />
@@ -139,7 +141,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-user-border-glass flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-user-text-secondary text-sm">
-            © {new Date().getFullYear()} Poupe Agora. Todos os direitos reservados.
+            © {new Date().getFullYear()} {platformName}. Todos os direitos reservados.
           </p>
           <p className="text-user-text-secondary text-sm">
             Feito com <span className="text-user-accent">♥</span> para suas finanças

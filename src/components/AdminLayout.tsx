@@ -16,6 +16,7 @@ import {
     Bot,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useBrandingContext } from '@/contexts/BrandingContext';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -82,6 +83,7 @@ export function AdminLayout() {
     const { user, signOut } = useAuth(true);
     const location = useLocation();
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { logoUrl, platformName } = useBrandingContext();
 
     // PROTEÇÃO: Se não tem usuário, não renderiza nada
     if (!user) {
@@ -104,12 +106,18 @@ export function AdminLayout() {
                 <div className="p-6">
                     {/* LOGO */}
                     <div className="flex items-center gap-2 mb-8">
-                        <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold text-xl">P</span>
-                        </div>
-                        <span className="text-xl font-bold text-white">
-                            Poupe Agora
-                        </span>
+                        {logoUrl ? (
+                            <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[160px] object-contain" />
+                        ) : (
+                            <>
+                                <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                    <span className="text-white font-bold text-xl">{platformName.charAt(0)}</span>
+                                </div>
+                                <span className="text-xl font-bold text-white">
+                                    {platformName}
+                                </span>
+                            </>
+                        )}
                     </div>
 
                     {/* NAVEGAÇÃO */}
@@ -176,10 +184,16 @@ export function AdminLayout() {
             {/* MOBILE HEADER */}
             <div className="lg:hidden flex items-center justify-between p-4 bg-slate-900 border-b border-slate-800">
                 <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                        <span className="text-white font-bold text-xl">P</span>
-                    </div>
-                    <span className="text-white font-bold">Poupe Agora</span>
+                    {logoUrl ? (
+                        <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[140px] object-contain" />
+                    ) : (
+                        <>
+                            <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-xl">{platformName.charAt(0)}</span>
+                            </div>
+                            <span className="text-white font-bold">{platformName}</span>
+                        </>
+                    )}
                 </div>
                 <Button
                     variant="ghost"
