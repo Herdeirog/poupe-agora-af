@@ -34,6 +34,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
     const isLoadingRef = useRef(false);
     const initializedRef = useRef(false);
+    const userRef = useRef<User | null>(null);
+
+    // Mantém a ref sincronizada com o state
+    const setUserAndRef = (u: User | null) => {
+        userRef.current = u;
+        setUser(u);
+    };
 
     async function loadUserProfile(authUser: any): Promise<User | null> {
         try {
@@ -102,9 +109,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     if (userProfile) {
                         if (!userProfile.ativo) {
                             await supabase.auth.signOut();
-                            setUser(null);
+                            setUserAndRef(null);
                         } else {
-                            setUser(userProfile);
+                            setUserAndRef(userProfile);
                             // Migration silenciosa
                             setTimeout(() => {
                                 runMigration(session.user.id).catch(() => {});
@@ -127,14 +134,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             console.log('[AuthProvider] Auth event:', event);
 
             if (event === 'SIGNED_OUT') {
-                setUser(null);
+                setUserAndRef(null);
                 setLoading(false);
                 return;
             }
 
             if (event === 'SIGNED_IN' && session?.user) {
-                // Só recarrega se ainda não tem usuário ou é outro usuário
-                if (!user || user.id !== session.user.id) {
+                // Usa ref para evitar stale closure — user no closure é sempre null
+                if (!userRef.current || userRef.current.id !== session.user.id) {
                     if (isLoadingRef.current) return;
                     isLoadingRef.current = true;
                     try {
@@ -142,25 +149,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                         if (userProfile) {
                             if (!userProfile.ativo) {
                                 await supabase.auth.signOut();
-                                setUser(null);
+                                setUserAndRef(null);
                             } else {
-                                setUser(userProfile);
+                                setUserAndRef(userProfile);
                             }
                         }
                     } finally {
                         isLoadingRef.current = false;
                         setLoading(false);
                     }
+                } else {
+                    // Usuário já carregado — garante que loading é liberado
+                    setLoading(false);
                 }
                 return;
             }
 
-            // INITIAL_SESSION — já tratado pelo initialize()
+            // INITIAL_SESSION — libera loading independente de ter sessão ou não
             if (event === 'INITIAL_SESSION') {
-                // Se o initialize já completou e não há sessão, liberar loading
                 if (!session) {
                     setLoading(false);
                 }
+                // Se tem sessão, o initialize() já está tratando — não duplicar
             }
         });
 
@@ -172,7 +182,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     async function signOut() {
         sessionStorage.setItem('explicit_logout', 'true');
-        setUser(null);
+        setUserAndRef(null);
         await supabase.auth.signOut();
         window.location.href = '/auth';
     }

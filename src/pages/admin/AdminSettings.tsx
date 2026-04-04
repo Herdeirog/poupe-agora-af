@@ -199,7 +199,6 @@ export default function AdminSettings() {
       await settingsService.saveWhiteLabelSettings({
         platformName: generalSettings.platformName,
         subdomain: generalSettings.subdomain,
-        logoUrl: generalSettings.logo,
         primaryColor: generalSettings.primaryColor,
       });
       toast.success("Configurações gerais salvas com sucesso!");
@@ -562,13 +561,14 @@ export default function AdminSettings() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-foreground">Logo (URL)</Label>
-                  <Input
-                    placeholder="https://..."
-                    value={generalSettings.logo}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, logo: e.target.value })}
-                    className="glass-input"
-                  />
+                  <Label className="text-foreground">Logo Atual</Label>
+                  <div className="h-10 flex items-center bg-white/[0.02] rounded-lg border border-white/[0.1] px-3">
+                    {generalSettings.logo ? (
+                      <img src={generalSettings.logo} alt="Logo atual" className="h-7 w-auto max-w-[160px] object-contain" />
+                    ) : (
+                      <span className="text-sm text-muted-foreground">Nenhuma logo definida — use o upload abaixo</span>
+                    )}
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-foreground">Cor Primária</Label>
