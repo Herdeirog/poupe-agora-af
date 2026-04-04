@@ -107,17 +107,15 @@ export function AdminLayout() {
                     {/* LOGO */}
                     <div className="flex items-center gap-2 mb-8">
                         {logoUrl ? (
-                            <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[160px] object-contain" />
+                            <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[32px] object-contain" />
                         ) : (
-                            <>
-                                <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-xl">{platformName.charAt(0)}</span>
-                                </div>
-                                <span className="text-xl font-bold text-white">
-                                    {platformName}
-                                </span>
-                            </>
+                            <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-xl">{platformName.charAt(0)}</span>
+                            </div>
                         )}
+                        <span className="text-xl font-bold text-white">
+                            {platformName}
+                        </span>
                     </div>
 
                     {/* NAVEGAÇÃO */}
@@ -185,15 +183,13 @@ export function AdminLayout() {
             <div className="lg:hidden flex items-center justify-between p-4 bg-slate-900 border-b border-slate-800">
                 <div className="flex items-center gap-2">
                     {logoUrl ? (
-                        <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[140px] object-contain" />
+                        <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[32px] object-contain" />
                     ) : (
-                        <>
-                            <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-xl">{platformName.charAt(0)}</span>
-                            </div>
-                            <span className="text-white font-bold">{platformName}</span>
-                        </>
+                        <div className="h-8 w-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+                            <span className="text-white font-bold text-xl">{platformName.charAt(0)}</span>
+                        </div>
                     )}
+                    <span className="text-white font-bold">{platformName}</span>
                 </div>
                 <Button
                     variant="ghost"
