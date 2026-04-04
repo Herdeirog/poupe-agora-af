@@ -68,5 +68,31 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- 5. Permissões básicas (caso RLS ou permissões estejam bloqueando)
+-- Atualizado em: 2026-04-04 - Grants granulares em vez de ALL para anon
 GRANT USAGE ON SCHEMA public TO postgres, anon, authenticated, service_role;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, anon, authenticated, service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO postgres, service_role;
+
+-- Acesso mínimo ao anon
+GRANT SELECT ON public.agents TO anon;
+GRANT SELECT ON public.categories TO anon;
+GRANT SELECT ON public.global_settings TO anon;
+
+-- Acesso ao authenticated (controlado por RLS)
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.transactions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.goals TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.budgets TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.categories TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.reminders TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.financial_commitments TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.recurring_payments TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.commitment_reminders TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.agenda_events TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.agenda_recurrences TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.subscriptions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.user_roles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.global_settings TO authenticated;
+
+-- Storage GRANTs
+GRANT ALL ON storage.objects TO authenticated;
+GRANT ALL ON storage.buckets TO authenticated;

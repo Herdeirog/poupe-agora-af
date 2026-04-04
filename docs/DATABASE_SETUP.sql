@@ -10,7 +10,7 @@
 -- Se executar em um projeto existente, as cláusulas IF NOT EXISTS e ON CONFLICT evitam erros,
 -- mas verifique se não há conflitos com dados existentes.
 --
--- Última atualização: 2026-03-22
+-- Última atualização: 2026-04-04
 -- =====================================================================
 
 -- =====================================================================
@@ -1070,6 +1070,7 @@ REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon;
 -- Conceder acesso mínimo ao anon (apenas leitura de dados públicos)
 GRANT SELECT ON public.agents TO anon;
 GRANT SELECT ON public.categories TO anon;
+GRANT SELECT ON public.global_settings TO anon;
 
 -- Conceder acesso ao authenticated (controlado por RLS)
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO authenticated;
@@ -1083,8 +1084,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.recurring_payments TO authenticat
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.commitment_reminders TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.agenda_events TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.agenda_recurrences TO authenticated;
-GRANT SELECT ON public.subscriptions TO authenticated;
-GRANT SELECT ON public.user_roles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.subscriptions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.user_roles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.global_settings TO authenticated;
 GRANT SELECT ON public.agents TO authenticated;
 
 -- Tabelas gerenciadas por admin (acesso via RLS policies)
@@ -1150,6 +1152,23 @@ USING (bucket_id = 'branding');
 CREATE POLICY "Anyone can view branding assets"
 ON storage.objects FOR SELECT TO public
 USING (bucket_id = 'branding');
+
+-- Políticas adicionais para branding (nomes alternativos para compatibilidade)
+CREATE POLICY "Allow authenticated uploads to branding"
+ON storage.objects FOR INSERT TO authenticated
+WITH CHECK (bucket_id = 'branding');
+
+CREATE POLICY "Allow authenticated updates to branding"
+ON storage.objects FOR UPDATE TO authenticated
+USING (bucket_id = 'branding');
+
+CREATE POLICY "Allow public read branding"
+ON storage.objects FOR SELECT TO public
+USING (bucket_id = 'branding');
+
+-- Storage GRANTs
+GRANT ALL ON storage.objects TO authenticated;
+GRANT ALL ON storage.buckets TO authenticated;
 
 -- =====================================================================
 -- SEÇÃO 12: SEED DATA
@@ -1276,9 +1295,9 @@ ON CONFLICT (base_currency, target_currency) DO NOTHING;
 -- =====================================================================
 
 -- FIM DO SCRIPT
--- Última verificação: 2026-03-22
+-- Última verificação: 2026-04-04
 --
--- RESUMO DA AUDITORIA (2026-03-22):
+-- RESUMO DA AUDITORIA (2026-04-04):
 -- ✅ 21 tabelas confirmadas no banco de dados atual
 -- ✅ 13 tabelas adicionais para features futuras (family, plans, admin, etc.)
 -- ✅ Todas as colunas, defaults e tipos validados contra o schema real

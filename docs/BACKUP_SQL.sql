@@ -18,8 +18,8 @@
 --   - O trigger on_auth_user_created será recriado (DROP + CREATE)
 --   - Storage bucket 'branding' será criado se não existir
 --
--- Gerado em: 2026-03-22
--- Versão: 2.0.0
+-- Gerado em: 2026-04-04
+-- Versão: 2.1.0
 -- =====================================================================
 
 BEGIN;
@@ -1040,6 +1040,7 @@ REVOKE ALL ON ALL TABLES IN SCHEMA public FROM anon;
 -- Acesso mínimo ao anon
 GRANT SELECT ON public.agents TO anon;
 GRANT SELECT ON public.categories TO anon;
+GRANT SELECT ON public.global_settings TO anon;
 
 -- Acesso ao authenticated (controlado por RLS)
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.profiles TO authenticated;
@@ -1053,8 +1054,9 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON public.recurring_payments TO authenticat
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.commitment_reminders TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.agenda_events TO authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON public.agenda_recurrences TO authenticated;
-GRANT SELECT ON public.subscriptions TO authenticated;
-GRANT SELECT ON public.user_roles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.subscriptions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.user_roles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON public.global_settings TO authenticated;
 GRANT SELECT ON public.agents TO authenticated;
 
 -- Tabelas gerenciadas por admin
@@ -1109,6 +1111,15 @@ DO $$ BEGIN CREATE POLICY "Admins can upload branding assets" ON storage.objects
 DO $$ BEGIN CREATE POLICY "Admins can update branding assets" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'branding'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE POLICY "Admins can delete branding assets" ON storage.objects FOR DELETE TO authenticated USING (bucket_id = 'branding'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 DO $$ BEGIN CREATE POLICY "Anyone can view branding assets" ON storage.objects FOR SELECT TO public USING (bucket_id = 'branding'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- Políticas adicionais para branding (nomes alternativos para compatibilidade)
+DO $$ BEGIN CREATE POLICY "Allow authenticated uploads to branding" ON storage.objects FOR INSERT TO authenticated WITH CHECK (bucket_id = 'branding'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE POLICY "Allow authenticated updates to branding" ON storage.objects FOR UPDATE TO authenticated USING (bucket_id = 'branding'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE POLICY "Allow public read branding" ON storage.objects FOR SELECT TO public USING (bucket_id = 'branding'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+-- Storage GRANTs
+GRANT ALL ON storage.objects TO authenticated;
+GRANT ALL ON storage.buckets TO authenticated;
 
 -- =====================================================================
 -- 12. SEED DATA
@@ -1246,6 +1257,6 @@ COMMIT;
 -- 5. Rodar o projeto:
 --    npm install && npm run dev
 --
--- Versão: 2.0.0 | Gerado em: 2026-03-22
+-- Versão: 2.1.0 | Gerado em: 2026-04-04
 -- Total: 34 tabelas, 10 funções, 17 triggers, 100+ RLS policies
 -- =====================================================================
