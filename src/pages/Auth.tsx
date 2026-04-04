@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Wallet, Eye, EyeOff, AlertTriangle, Mail } from 'lucide-react';
+import { useBrandingContext } from '@/contexts/BrandingContext';
 
 export default function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,6 +18,7 @@ export default function Auth() {
   const [isAccountDeactivated, setIsAccountDeactivated] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { logoUrl, platformName } = useBrandingContext();
 
   // Clear explicit logout flag when arriving at auth page (allows legacy user to be loaded on next visit)
   sessionStorage.removeItem('explicit_logout');
@@ -154,11 +156,15 @@ export default function Auth() {
         <div className="bg-slate-900/50 backdrop-blur-xl border border-slate-800/50 rounded-2xl p-8 shadow-2xl">
           {/* LOGO */}
           <div className="flex flex-col items-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-4">
-              <Wallet className="w-8 h-8 text-white" />
-            </div>
+            {logoUrl ? (
+              <img src={logoUrl} alt={platformName} className="h-16 w-auto max-w-[200px] object-contain mb-4" />
+            ) : (
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-4">
+                <Wallet className="w-8 h-8 text-white" />
+              </div>
+            )}
             <h1 className="text-2xl font-bold text-white">
-              Poupe <span className="text-emerald-400">Agora</span>
+              {platformName}
             </h1>
             <p className="text-slate-400 text-sm mt-2">
               {isLogin ? 'Entrar na sua conta' : 'Criar nova conta'}

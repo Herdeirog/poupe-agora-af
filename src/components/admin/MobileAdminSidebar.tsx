@@ -15,6 +15,7 @@ import {
   Bot,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useBrandingContext } from "@/contexts/BrandingContext";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ export function MobileAdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { signOut } = useAuth();
+  const { logoUrl, platformName } = useBrandingContext();
   const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -57,10 +59,16 @@ export function MobileAdminSidebar() {
         {/* Header */}
         <div className="p-4 border-b border-border/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary green-glow-sm">
-              <Wallet className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="text-lg font-bold text-foreground">Poupe Agora</span>
+            {logoUrl ? (
+              <img src={logoUrl} alt="Logo" className="h-8 w-auto max-w-[140px] object-contain" />
+            ) : (
+              <>
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary green-glow-sm">
+                  <Wallet className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <span className="text-lg font-bold text-foreground">{platformName}</span>
+              </>
+            )}
           </div>
           <SheetClose asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">

@@ -17,10 +17,12 @@ import CurrencySettingsTab from "@/components/admin/CurrencySettingsTab";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { agentService, type EvolutionAPISettings } from "@/services/agentService";
 import { supabase } from "@/integrations/supabase/client";
+import { useBrandingContext } from "@/contexts/BrandingContext";
 
 export default function AdminSettings() {
   const [searchParams] = useSearchParams();
   const defaultTab = searchParams.get('tab') || 'general';
+  const { reload: reloadBranding } = useBrandingContext();
   const [generalSettings, setGeneralSettings] = useState({
     platformName: "Poupe Agora",
     logo: "",
@@ -202,8 +204,9 @@ export default function AdminSettings() {
         primaryColor: generalSettings.primaryColor,
       });
       toast.success("Configurações gerais salvas com sucesso!");
-      // Recarregar para confirmar que salvou
+      // Recarregar para confirmar que salvou e atualizar o branding global
       await loadBranding();
+      await reloadBranding();
     } catch (error) {
       console.error("Erro ao salvar configurações gerais:", error);
       toast.error("Erro ao salvar configurações gerais. Verifique o console.");
@@ -241,7 +244,8 @@ export default function AdminSettings() {
       setGeneralSettings(prev => ({ ...prev, logo: url }));
       setLogoPreview(url);
       setLogoFile(null);
-      toast.success("Logo salvo com sucesso! Atualize a página para ver as mudanças.");
+      await reloadBranding();
+      toast.success("Logo salvo com sucesso!");
     } catch (error) {
       console.error("Error saving logo:", error);
       toast.error("Erro ao salvar logo.");
@@ -261,7 +265,8 @@ export default function AdminSettings() {
       await settingsService.saveWhiteLabelSettings({ faviconUrl: url });
       setFaviconPreview(url);
       setFaviconFile(null);
-      toast.success("Favicon salvo com sucesso! Atualize a página para ver as mudanças.");
+      await reloadBranding();
+      toast.success("Favicon salvo com sucesso!");
     } catch (error) {
       console.error("Error saving favicon:", error);
       toast.error("Erro ao salvar favicon.");

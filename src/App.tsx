@@ -7,10 +7,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
-import { useBranding } from "@/hooks/useBranding";
-
 // Auth Provider (centralizado - resolve bug de múltiplas instâncias)
 import { AuthProvider } from "@/contexts/AuthContext";
+
+// Branding Provider (white label - nome, logo, cores do Supabase)
+import { BrandingProvider, useBrandingContext } from "@/contexts/BrandingContext";
 
 // Currency Provider
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
@@ -73,7 +74,7 @@ import AppAgenda from "./pages/app/AppAgenda";
 const queryClient = new QueryClient();
 
 function FaviconUpdater() {
-  const { faviconUrl } = useBranding();
+  const { faviconUrl } = useBrandingContext();
 
   useEffect(() => {
     if (faviconUrl) {
@@ -94,6 +95,7 @@ const App = () => (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+      <BrandingProvider>
       <CurrencyProvider>
         <TooltipProvider>
           <Toaster />
@@ -170,6 +172,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
       </CurrencyProvider>
+      </BrandingProvider>
       </AuthProvider>
     </QueryClientProvider>
   </ErrorBoundary>

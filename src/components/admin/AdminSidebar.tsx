@@ -21,7 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useBranding } from "@/hooks/useBranding";
+import { useBrandingContext } from "@/contexts/BrandingContext";
 
 const menuItems = [
   {
@@ -99,7 +99,7 @@ const menuItems = [
 export function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
-  const { logoUrl } = useBranding();
+  const { logoUrl, platformName } = useBrandingContext();
 
   return (
     <aside
@@ -118,7 +118,7 @@ export function AdminSidebar() {
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary green-glow-sm">
                 <Wallet className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-lg font-bold text-foreground">Poupe Agora</span>
+              <span className="text-lg font-bold text-foreground">{platformName}</span>
             </div>
           )
         )}

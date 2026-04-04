@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Wallet, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useBrandingContext } from "@/contexts/BrandingContext";
 
 const LandingNavbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { logoUrl, platformName } = useBrandingContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,12 +34,18 @@ const LandingNavbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="icon-circle icon-circle-success p-2 group-hover:shadow-green-glow transition-shadow duration-300">
-              <Wallet className="h-5 w-5 text-user-accent" />
-            </div>
-            <span className="text-xl font-bold text-user-text-primary">
-              Poupe <span className="text-user-accent">Agora</span>
-            </span>
+            {logoUrl ? (
+              <img src={logoUrl} alt={platformName} className="h-8 w-auto max-w-[160px] object-contain" />
+            ) : (
+              <>
+                <div className="icon-circle icon-circle-success p-2 group-hover:shadow-green-glow transition-shadow duration-300">
+                  <Wallet className="h-5 w-5 text-user-accent" />
+                </div>
+                <span className="text-xl font-bold text-user-text-primary">
+                  {platformName}
+                </span>
+              </>
+            )}
           </Link>
 
           {/* Desktop Navigation */}

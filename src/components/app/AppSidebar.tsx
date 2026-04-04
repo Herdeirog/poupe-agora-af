@@ -15,7 +15,7 @@ import {
   CalendarClock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useBranding } from '@/hooks/useBranding';
+import { useBrandingContext } from '@/contexts/BrandingContext';
 
 const menuItems = [
   { title: 'Dashboard', url: '/app/dashboard', icon: LayoutDashboard },
@@ -35,7 +35,7 @@ const menuItems = [
 
 export function AppSidebar() {
   const location = useLocation();
-  const { logoUrl } = useBranding();
+  const { logoUrl, platformName } = useBrandingContext();
 
   return (
     <aside className="hidden lg:flex w-64 min-h-screen sidebar-premium flex-col">
@@ -47,10 +47,10 @@ export function AppSidebar() {
           ) : (
             <>
               <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center green-glow-sm">
-                <span className="text-primary font-bold text-lg">P</span>
+                <span className="text-primary font-bold text-lg">{platformName.charAt(0)}</span>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-foreground">Poupe Agora</h1>
+                <h1 className="text-lg font-bold text-foreground">{platformName}</h1>
                 <p className="text-xs text-muted-foreground">Painel do Usuário</p>
               </div>
             </>
@@ -90,7 +90,7 @@ export function AppSidebar() {
       <div className="p-4 border-t border-border/50">
         <div className="glass-card p-4 text-center">
           <p className="text-xs text-muted-foreground">
-            © 2024 Poupe Agora
+            © 2024 {platformName}
           </p>
           <p className="text-[10px] text-muted-foreground/60 mt-1">
             Versão 2.0 Premium

@@ -17,6 +17,7 @@ import {
   CalendarClock,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useBrandingContext } from '@/contexts/BrandingContext';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
@@ -39,6 +40,7 @@ const menuItems = [
 
 export function MobileSidebar() {
   const location = useLocation();
+  const { logoUrl, platformName } = useBrandingContext();
   const [open, setOpen] = useState(false);
 
   return (
@@ -53,13 +55,19 @@ export function MobileSidebar() {
         {/* Header */}
         <div className="p-6 border-b border-border/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center green-glow-sm">
-              <span className="text-primary font-bold text-lg">P</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-foreground">Poupe Agora</h1>
-              <p className="text-xs text-muted-foreground">Painel do Usuário</p>
-            </div>
+            {logoUrl ? (
+              <img src={logoUrl} alt="Logo" className="h-8 w-auto max-w-[140px] object-contain" />
+            ) : (
+              <>
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center green-glow-sm">
+                  <span className="text-primary font-bold text-lg">{platformName.charAt(0)}</span>
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-foreground">{platformName}</h1>
+                  <p className="text-xs text-muted-foreground">Painel do Usuário</p>
+                </div>
+              </>
+            )}
           </div>
           <SheetClose asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -101,7 +109,7 @@ export function MobileSidebar() {
         <div className="p-4 border-t border-border/50">
           <div className="glass-card p-4 text-center">
             <p className="text-xs text-muted-foreground">
-              © 2024 Poupe Agora
+              © 2024 {platformName}
             </p>
             <p className="text-[10px] text-muted-foreground/60 mt-1">
               Versão 2.0 Premium
