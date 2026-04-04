@@ -42,22 +42,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(u);
     };
 
-    async function loadUserProfile(authUser: any): Promise<User | null> {
+    function buildFallbackUser(authUser: any): User {
+        return {
+            id: authUser.id,
+            email: authUser.email ?? '',
+            nome: authUser.email?.split('@')[0] || 'Usuário',
+            is_admin: authUser.app_metadata?.is_admin || false,
+            ativo: true,
+            whatsapp: null,
+            phone: null,
+            app_metadata: authUser.app_metadata,
+        };
+    }
+
+    async function loadUserProfile(authUser: any): Promise<User> {
+        // Timeout de 5s para não travar o app
+        const timeout = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Profile fetch timed out')), 5000)
+        );
+
         try {
-            // Buscar perfil e role em paralelo para não sofrer timeout duplo
-            const [profileResult, roleResult] = await Promise.all([
-                supabase
-                    .from('profiles')
-                    .select('id, full_name, whatsapp, ativo')
-                    .eq('id', authUser.id)
-                    .maybeSingle(),
-                supabase
-                    .from('user_roles')
-                    .select('role')
-                    .eq('user_id', authUser.id)
-                    .eq('role', 'admin')
-                    .maybeSingle()
+            const [profileResult, roleResult] = await Promise.race([
+                Promise.all([
+                    supabase
+                        .from('profiles')
+                        .select('id, full_name, whatsapp, ativo')
+                        .eq('id', authUser.id)
+                        .maybeSingle(),
+                    supabase
+                        .from('user_roles')
+                        .select('role')
+                        .eq('user_id', authUser.id)
+                        .eq('role', 'admin')
+                        .maybeSingle()
+                ]),
+                timeout
             ]);
+
+            // Se deu erro de permissão, usa fallback sem travar
+            if (profileResult.error) {
+                console.warn('[AuthProvider] Profile query error:', profileResult.error.message);
+            }
+            if (roleResult.error) {
+                console.warn('[AuthProvider] Role query error:', roleResult.error.message);
+            }
 
             const profile = profileResult.data;
             const hasAdminRole = !!roleResult.data;
@@ -75,18 +103,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 app_metadata: authUser.app_metadata,
             };
         } catch (err) {
-            console.error('[AuthProvider] Error loading profile:', err);
-            // Em caso de erro, ainda retorna o usuário básico (sem bloquear o app)
-            return {
-                id: authUser.id,
-                email: authUser.email ?? '',
-                nome: authUser.email?.split('@')[0] || 'Usuário',
-                is_admin: authUser.app_metadata?.is_admin || false,
-                ativo: true,
-                whatsapp: null,
-                phone: null,
-                app_metadata: authUser.app_metadata,
-            };
+            console.warn('[AuthProvider] Profile load failed, using fallback:', (err as Error).message);
+            return buildFallbackUser(authUser);
         }
     }
 
