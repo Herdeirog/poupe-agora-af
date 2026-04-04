@@ -69,9 +69,11 @@ export function BrandingProvider({ children }: { children: ReactNode }) {
     try {
       const settings = await settingsService.getWhiteLabelSettings();
       const color = settings.primaryColor || defaults.primaryColor;
+      const name = settings.platformName || defaults.platformName;
       applyPrimaryColor(color);
+      document.title = name;
       setState({
-        platformName: settings.platformName || defaults.platformName,
+        platformName: name,
         logoUrl: settings.logoUrl,
         faviconUrl: settings.faviconUrl,
         primaryColor: color,
