@@ -56,18 +56,16 @@ export function MobileSidebar() {
         <div className="p-6 border-b border-border/50 flex items-center justify-between">
           <div className="flex items-center gap-3">
             {logoUrl ? (
-              <img src={logoUrl} alt="Logo" className="h-8 w-auto max-w-[140px] object-contain" />
+              <img src={logoUrl} alt="Logo" className="h-8 w-auto max-w-[32px] object-contain" />
             ) : (
-              <>
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center green-glow-sm">
-                  <span className="text-primary font-bold text-lg">{platformName.charAt(0)}</span>
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-foreground">{platformName}</h1>
-                  <p className="text-xs text-muted-foreground">Painel do Usuário</p>
-                </div>
-              </>
+              <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center green-glow-sm">
+                <span className="text-primary font-bold text-lg">{platformName.charAt(0)}</span>
+              </div>
             )}
+            <div>
+              <h1 className="text-lg font-bold text-foreground">{platformName}</h1>
+              <p className="text-xs text-muted-foreground">Painel do Usuário</p>
+            </div>
           </div>
           <SheetClose asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">

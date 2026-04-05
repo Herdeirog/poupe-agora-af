@@ -896,6 +896,26 @@ export default function AdminSettings() {
                   />
                 </div>
 
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1 glass-input"
+                    onClick={handleCreateInstance}
+                    disabled={creatingInstance || whatsappSettings.instanceStatus === 'connected'}
+                  >
+                    {creatingInstance ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />}
+                    Criar Instância
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1 glass-input"
+                    onClick={handleSetWebhook}
+                    disabled={settingWebhook}
+                  >
+                    {settingWebhook ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Link className="mr-2 h-4 w-4" />}
+                    Configurar Webhook
+                  </Button>
+                </div>
                 <div className="flex gap-2">
                   <Button className="flex-1 bg-primary hover:bg-primary/90" onClick={handleConnectWhatsApp} disabled={whatsappSettings.instanceStatus === 'connected'}>
                     <RefreshCw className="mr-2 h-4 w-4" />
