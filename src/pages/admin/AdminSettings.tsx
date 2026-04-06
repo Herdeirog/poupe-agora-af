@@ -28,6 +28,9 @@ export default function AdminSettings() {
     logo: "",
     subdomain: "app",
     primaryColor: "#00E676",
+    backgroundColor: "#0f1117",
+    sidebarColor: "#080c12",
+    cardColor: "#141920",
   });
 
   const [paymentSettings, setPaymentSettings] = useState({
@@ -108,12 +111,15 @@ export default function AdminSettings() {
     try {
       const whiteLabel = await settingsService.getWhiteLabelSettings();
       setGeneralSettings({
-        platformName: whiteLabel.platformName || "Poupe Agora",
-        subdomain: whiteLabel.subdomain || "app",
-        logo: whiteLabel.logoUrl || "",
-        primaryColor: whiteLabel.primaryColor || "#00E676",
+        platformName:    whiteLabel.platformName    || "Poupe Agora",
+        subdomain:       whiteLabel.subdomain       || "app",
+        logo:            whiteLabel.logoUrl         || "",
+        primaryColor:    whiteLabel.primaryColor    || "#00E676",
+        backgroundColor: whiteLabel.backgroundColor || "#0f1117",
+        sidebarColor:    whiteLabel.sidebarColor    || "#080c12",
+        cardColor:       whiteLabel.cardColor       || "#141920",
       });
-      if (whiteLabel.logoUrl) setLogoPreview(whiteLabel.logoUrl);
+      if (whiteLabel.logoUrl)    setLogoPreview(whiteLabel.logoUrl);
       if (whiteLabel.faviconUrl) setFaviconPreview(whiteLabel.faviconUrl);
     } catch (error) {
       console.error("Error loading branding:", error);
@@ -199,18 +205,41 @@ export default function AdminSettings() {
   const handleSaveGeneral = async () => {
     try {
       await settingsService.saveWhiteLabelSettings({
-        platformName: generalSettings.platformName,
-        subdomain: generalSettings.subdomain,
-        primaryColor: generalSettings.primaryColor,
+        platformName:    generalSettings.platformName,
+        subdomain:       generalSettings.subdomain,
+        primaryColor:    generalSettings.primaryColor,
+        backgroundColor: generalSettings.backgroundColor,
+        sidebarColor:    generalSettings.sidebarColor,
+        cardColor:       generalSettings.cardColor,
       });
       toast.success("Configurações gerais salvas com sucesso!");
-      // Recarregar para confirmar que salvou e atualizar o branding global
       await loadBranding();
       await reloadBranding();
     } catch (error) {
       console.error("Erro ao salvar configurações gerais:", error);
       toast.error("Erro ao salvar configurações gerais. Verifique o console.");
     }
+  };
+
+  const THEME_PRESETS = [
+    { name: 'Verde Escuro',  primary: '#00E676', bg: '#0f1117', sidebar: '#080c12', card: '#141920' },
+    { name: 'Azul Escuro',   primary: '#3B82F6', bg: '#0f1523', sidebar: '#0a101d', card: '#141e2e' },
+    { name: 'Roxo Escuro',   primary: '#8B5CF6', bg: '#130f1f', sidebar: '#0e0a17', card: '#1a1427' },
+    { name: 'Laranja Escuro',primary: '#F97316', bg: '#140f0a', sidebar: '#0e0a07', card: '#1e1510' },
+    { name: 'Rosa Escuro',   primary: '#EC4899', bg: '#140a12', sidebar: '#0e070d', card: '#1e1019' },
+    { name: 'Claro Verde',   primary: '#00C060', bg: '#f0f4f8', sidebar: '#e2e8f0', card: '#ffffff' },
+    { name: 'Claro Azul',    primary: '#3B82F6', bg: '#f0f4ff', sidebar: '#e2eaff', card: '#ffffff' },
+    { name: 'Claro Roxo',    primary: '#8B5CF6', bg: '#f5f0ff', sidebar: '#ede8ff', card: '#ffffff' },
+  ] as const;
+
+  const applyPreset = (preset: typeof THEME_PRESETS[number]) => {
+    setGeneralSettings(prev => ({
+      ...prev,
+      primaryColor:    preset.primary,
+      backgroundColor: preset.bg,
+      sidebarColor:    preset.sidebar,
+      cardColor:       preset.card,
+    }));
   };
 
 
@@ -575,22 +604,6 @@ export default function AdminSettings() {
                     )}
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-foreground">Cor Primária</Label>
-                  <div className="flex gap-2">
-                    <Input
-                      type="color"
-                      value={generalSettings.primaryColor}
-                      onChange={(e) => setGeneralSettings({ ...generalSettings, primaryColor: e.target.value })}
-                      className="w-12 h-10 p-1 glass-input cursor-pointer"
-                    />
-                    <Input
-                      value={generalSettings.primaryColor}
-                      onChange={(e) => setGeneralSettings({ ...generalSettings, primaryColor: e.target.value })}
-                      className="glass-input"
-                    />
-                  </div>
-                </div>
               </div>
               <div className="flex justify-end pt-4">
                 <Button className="bg-primary hover:bg-primary/90" onClick={handleSaveGeneral}>
@@ -598,6 +611,164 @@ export default function AdminSettings() {
                   Salvar Configurações
                 </Button>
               </div>
+            </div>
+          </div>
+
+          {/* Cores do Sistema */}
+          <div className="glass-strong p-6 shadow-premium animate-fade-in mt-6">
+            <h3 className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
+              <Settings2 className="h-5 w-5 text-primary" />
+              Cores do Sistema
+            </h3>
+            <p className="text-sm text-muted-foreground mb-6">
+              Personalize todas as cores dos painéis admin e cliente. As alterações refletem instantaneamente ao salvar.
+            </p>
+
+            {/* Presets */}
+            <div className="mb-6">
+              <Label className="text-foreground mb-3 block">Temas Prontos</Label>
+              <div className="flex flex-wrap gap-2">
+                {THEME_PRESETS.map((preset) => (
+                  <button
+                    key={preset.name}
+                    onClick={() => applyPreset(preset)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.06] transition-all text-sm text-foreground"
+                  >
+                    <span
+                      className="w-4 h-4 rounded-full border border-white/20 flex-shrink-0"
+                      style={{ backgroundColor: preset.primary }}
+                    />
+                    {preset.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Color pickers */}
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {/* Cor Primária */}
+              <div className="space-y-2">
+                <Label className="text-foreground text-sm">Cor Primária</Label>
+                <p className="text-xs text-muted-foreground">Botões, destaques, links ativos</p>
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    value={generalSettings.primaryColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, primaryColor: e.target.value })}
+                    className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
+                  />
+                  <Input
+                    value={generalSettings.primaryColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, primaryColor: e.target.value })}
+                    className="glass-input font-mono text-sm"
+                    maxLength={7}
+                  />
+                </div>
+              </div>
+
+              {/* Cor de Fundo */}
+              <div className="space-y-2">
+                <Label className="text-foreground text-sm">Cor de Fundo</Label>
+                <p className="text-xs text-muted-foreground">Fundo principal das páginas</p>
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    value={generalSettings.backgroundColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, backgroundColor: e.target.value })}
+                    className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
+                  />
+                  <Input
+                    value={generalSettings.backgroundColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, backgroundColor: e.target.value })}
+                    className="glass-input font-mono text-sm"
+                    maxLength={7}
+                  />
+                </div>
+              </div>
+
+              {/* Cor da Sidebar */}
+              <div className="space-y-2">
+                <Label className="text-foreground text-sm">Cor da Sidebar</Label>
+                <p className="text-xs text-muted-foreground">Fundo do menu lateral</p>
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    value={generalSettings.sidebarColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, sidebarColor: e.target.value })}
+                    className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
+                  />
+                  <Input
+                    value={generalSettings.sidebarColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, sidebarColor: e.target.value })}
+                    className="glass-input font-mono text-sm"
+                    maxLength={7}
+                  />
+                </div>
+              </div>
+
+              {/* Cor dos Cards */}
+              <div className="space-y-2">
+                <Label className="text-foreground text-sm">Cor dos Cards</Label>
+                <p className="text-xs text-muted-foreground">Cards, painéis e modais</p>
+                <div className="flex gap-2">
+                  <Input
+                    type="color"
+                    value={generalSettings.cardColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, cardColor: e.target.value })}
+                    className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
+                  />
+                  <Input
+                    value={generalSettings.cardColor}
+                    onChange={(e) => setGeneralSettings({ ...generalSettings, cardColor: e.target.value })}
+                    className="glass-input font-mono text-sm"
+                    maxLength={7}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Live Preview Bar */}
+            <div className="mt-6 p-4 rounded-xl border border-white/[0.08] overflow-hidden">
+              <p className="text-xs text-muted-foreground mb-3">Preview das cores</p>
+              <div className="flex gap-3 flex-wrap items-center">
+                <div
+                  className="h-10 w-32 rounded-lg flex items-center justify-center text-xs font-medium"
+                  style={{ backgroundColor: generalSettings.primaryColor, color: '#fff' }}
+                >
+                  Primária
+                </div>
+                <div
+                  className="h-10 w-32 rounded-lg flex items-center justify-center text-xs font-medium border border-white/10"
+                  style={{ backgroundColor: generalSettings.backgroundColor, color: '#fff' }}
+                >
+                  Fundo
+                </div>
+                <div
+                  className="h-10 w-32 rounded-lg flex items-center justify-center text-xs font-medium border border-white/10"
+                  style={{ backgroundColor: generalSettings.sidebarColor, color: '#fff' }}
+                >
+                  Sidebar
+                </div>
+                <div
+                  className="h-10 w-32 rounded-lg flex items-center justify-center text-xs font-medium border border-white/10"
+                  style={{ backgroundColor: generalSettings.cardColor, color: '#fff' }}
+                >
+                  Cards
+                </div>
+                <button
+                  onClick={() => applyPreset({ name: 'Reset', primary: '#00E676', bg: '#0f1117', sidebar: '#080c12', card: '#141920' })}
+                  className="h-10 px-4 rounded-lg border border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.06] text-xs text-muted-foreground transition-all"
+                >
+                  Resetar padrão
+                </button>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-5 border-t border-border/50 mt-5">
+              <Button className="bg-primary hover:bg-primary/90" onClick={handleSaveGeneral}>
+                <Save className="mr-2 h-4 w-4" />
+                Salvar Cores
+              </Button>
             </div>
           </div>
 

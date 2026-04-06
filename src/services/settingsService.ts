@@ -6,6 +6,9 @@ export interface WhiteLabelSettings {
   logoUrl: string | null;
   faviconUrl: string | null;
   primaryColor: string;
+  backgroundColor: string;
+  sidebarColor: string;
+  cardColor: string;
 }
 
 export interface SiteSettings {
@@ -23,6 +26,9 @@ const defaultWhiteLabel: WhiteLabelSettings = {
   logoUrl: null,
   faviconUrl: null,
   primaryColor: "#00E676",
+  backgroundColor: "#0f1117",
+  sidebarColor: "#080c12",
+  cardColor: "#141920",
 };
 
 const defaultSiteSettings: SiteSettings = {
