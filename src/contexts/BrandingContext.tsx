@@ -70,7 +70,7 @@ function lighter(base: { h: number; s: number; l: number }, delta: number): stri
 
 // ─── Main injection function ────────────────────────────────────────────────
 
-function applyColorScheme(
+export function applyColorScheme(
   primaryHex: string,
   backgroundHex: string,
   sidebarHex: string,

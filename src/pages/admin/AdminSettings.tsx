@@ -17,7 +17,7 @@ import CurrencySettingsTab from "@/components/admin/CurrencySettingsTab";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { agentService, type EvolutionAPISettings } from "@/services/agentService";
 import { supabase } from "@/integrations/supabase/client";
-import { useBrandingContext } from "@/contexts/BrandingContext";
+import { useBrandingContext, applyColorScheme } from "@/contexts/BrandingContext";
 
 export default function AdminSettings() {
   const [searchParams] = useSearchParams();
@@ -204,6 +204,13 @@ export default function AdminSettings() {
 
   const handleSaveGeneral = async () => {
     try {
+      // Aplica as cores imediatamente no DOM — sem depender do round-trip ao banco
+      applyColorScheme(
+        generalSettings.primaryColor,
+        generalSettings.backgroundColor,
+        generalSettings.sidebarColor,
+        generalSettings.cardColor,
+      );
       await settingsService.saveWhiteLabelSettings({
         platformName:    generalSettings.platformName,
         subdomain:       generalSettings.subdomain,
@@ -221,18 +228,20 @@ export default function AdminSettings() {
     }
   };
 
-  const THEME_PRESETS = [
-    { name: 'Verde Escuro',  primary: '#00E676', bg: '#0f1117', sidebar: '#080c12', card: '#141920' },
-    { name: 'Azul Escuro',   primary: '#3B82F6', bg: '#0f1523', sidebar: '#0a101d', card: '#141e2e' },
-    { name: 'Roxo Escuro',   primary: '#8B5CF6', bg: '#130f1f', sidebar: '#0e0a17', card: '#1a1427' },
-    { name: 'Laranja Escuro',primary: '#F97316', bg: '#140f0a', sidebar: '#0e0a07', card: '#1e1510' },
-    { name: 'Rosa Escuro',   primary: '#EC4899', bg: '#140a12', sidebar: '#0e070d', card: '#1e1019' },
-    { name: 'Claro Verde',   primary: '#00C060', bg: '#f0f4f8', sidebar: '#e2e8f0', card: '#ffffff' },
-    { name: 'Claro Azul',    primary: '#3B82F6', bg: '#f0f4ff', sidebar: '#e2eaff', card: '#ffffff' },
-    { name: 'Claro Roxo',    primary: '#8B5CF6', bg: '#f5f0ff', sidebar: '#ede8ff', card: '#ffffff' },
-  ] as const;
+  type ColorPreset = { primary: string; bg: string; sidebar: string; card: string };
 
-  const applyPreset = (preset: typeof THEME_PRESETS[number]) => {
+  const THEME_PRESETS: (ColorPreset & { name: string })[] = [
+    { name: 'Verde Escuro',   primary: '#00E676', bg: '#0f1117', sidebar: '#080c12', card: '#141920' },
+    { name: 'Azul Escuro',    primary: '#3B82F6', bg: '#0f1523', sidebar: '#0a101d', card: '#141e2e' },
+    { name: 'Roxo Escuro',    primary: '#8B5CF6', bg: '#130f1f', sidebar: '#0e0a17', card: '#1a1427' },
+    { name: 'Laranja Escuro', primary: '#F97316', bg: '#140f0a', sidebar: '#0e0a07', card: '#1e1510' },
+    { name: 'Rosa Escuro',    primary: '#EC4899', bg: '#140a12', sidebar: '#0e070d', card: '#1e1019' },
+    { name: 'Claro Verde',    primary: '#00C060', bg: '#f0f4f8', sidebar: '#e2e8f0', card: '#ffffff' },
+    { name: 'Claro Azul',     primary: '#3B82F6', bg: '#f0f4ff', sidebar: '#e2eaff', card: '#ffffff' },
+    { name: 'Claro Roxo',     primary: '#8B5CF6', bg: '#f5f0ff', sidebar: '#ede8ff', card: '#ffffff' },
+  ];
+
+  const applyPreset = (preset: ColorPreset) => {
     setGeneralSettings(prev => ({
       ...prev,
       primaryColor:    preset.primary,
@@ -240,6 +249,8 @@ export default function AdminSettings() {
       sidebarColor:    preset.sidebar,
       cardColor:       preset.card,
     }));
+    // Aplica imediatamente no DOM para feedback visual instantâneo
+    applyColorScheme(preset.primary, preset.bg, preset.sidebar, preset.card);
   };
 
 
@@ -654,12 +665,18 @@ export default function AdminSettings() {
                   <Input
                     type="color"
                     value={generalSettings.primaryColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, primaryColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, primaryColor: v }; applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
                   />
                   <Input
                     value={generalSettings.primaryColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, primaryColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, primaryColor: v }; if (v.length === 7) applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="glass-input font-mono text-sm"
                     maxLength={7}
                   />
@@ -674,12 +691,18 @@ export default function AdminSettings() {
                   <Input
                     type="color"
                     value={generalSettings.backgroundColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, backgroundColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, backgroundColor: v }; applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
                   />
                   <Input
                     value={generalSettings.backgroundColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, backgroundColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, backgroundColor: v }; if (v.length === 7) applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="glass-input font-mono text-sm"
                     maxLength={7}
                   />
@@ -694,12 +717,18 @@ export default function AdminSettings() {
                   <Input
                     type="color"
                     value={generalSettings.sidebarColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, sidebarColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, sidebarColor: v }; applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
                   />
                   <Input
                     value={generalSettings.sidebarColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, sidebarColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, sidebarColor: v }; if (v.length === 7) applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="glass-input font-mono text-sm"
                     maxLength={7}
                   />
@@ -714,12 +743,18 @@ export default function AdminSettings() {
                   <Input
                     type="color"
                     value={generalSettings.cardColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, cardColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, cardColor: v }; applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="w-12 h-10 p-1 glass-input cursor-pointer flex-shrink-0"
                   />
                   <Input
                     value={generalSettings.cardColor}
-                    onChange={(e) => setGeneralSettings({ ...generalSettings, cardColor: e.target.value })}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setGeneralSettings(prev => { const next = { ...prev, cardColor: v }; if (v.length === 7) applyColorScheme(next.primaryColor, next.backgroundColor, next.sidebarColor, next.cardColor); return next; });
+                    }}
                     className="glass-input font-mono text-sm"
                     maxLength={7}
                   />
@@ -756,7 +791,7 @@ export default function AdminSettings() {
                   Cards
                 </div>
                 <button
-                  onClick={() => applyPreset({ name: 'Reset', primary: '#00E676', bg: '#0f1117', sidebar: '#080c12', card: '#141920' })}
+                  onClick={() => applyPreset({ primary: '#00E676', bg: '#0f1117', sidebar: '#080c12', card: '#141920' })}
                   className="h-10 px-4 rounded-lg border border-white/[0.1] bg-white/[0.02] hover:bg-white/[0.06] text-xs text-muted-foreground transition-all"
                 >
                   Resetar padrão
