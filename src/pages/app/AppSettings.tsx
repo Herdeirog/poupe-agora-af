@@ -30,9 +30,11 @@ import {
 } from 'lucide-react';
 
 const CURRENCY_OPTIONS = [
-  { value: 'BRL', label: 'Real (R$)', symbol: 'R$' },
-  { value: 'USD', label: 'Dólar ($)', symbol: '$' },
-  { value: 'EUR', label: 'Euro (€)', symbol: '€' },
+  { value: 'BRL', label: 'Real Brasileiro (R$)',      symbol: 'R$' },
+  { value: 'USD', label: 'Dólar Americano ($)',        symbol: '$'  },
+  { value: 'EUR', label: 'Euro (€)',                   symbol: '€'  },
+  { value: 'AOA', label: 'Kwanza Angolano (Kz)',       symbol: 'Kz' },
+  { value: 'MZN', label: 'Metical Moçambicano (MT)',   symbol: 'MT' },
 ];
 
 const DATE_FORMAT_OPTIONS = [

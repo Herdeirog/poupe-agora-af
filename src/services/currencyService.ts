@@ -11,9 +11,17 @@ interface CurrencySettings {
   rates: CurrencyRate[];
 }
 
+// Taxas padrão aproximadas (1 BRL = X moeda estrangeira)
+const DEFAULT_RATES: CurrencyRate[] = [
+  { id: "usd", baseCurrency: "BRL", targetCurrency: "USD", rate: 0.18,  source: "manual", updatedAt: new Date().toISOString() },
+  { id: "eur", baseCurrency: "BRL", targetCurrency: "EUR", rate: 0.17,  source: "manual", updatedAt: new Date().toISOString() },
+  { id: "aoa", baseCurrency: "BRL", targetCurrency: "AOA", rate: 149.0, source: "manual", updatedAt: new Date().toISOString() },
+  { id: "mzn", baseCurrency: "BRL", targetCurrency: "MZN", rate: 11.5,  source: "manual", updatedAt: new Date().toISOString() },
+];
+
 const defaults: CurrencySettings = {
   displayCurrency: "BRL",
-  rates: [],
+  rates: DEFAULT_RATES,
 };
 
 // ── Supabase persistence ─────────────────────────────────────────────────────
@@ -32,9 +40,17 @@ async function loadFromDB(): Promise<CurrencySettings> {
     }
 
     if (data?.value) {
-      return { ...defaults, ...(data.value as CurrencySettings) };
+      const saved = data.value as CurrencySettings;
+      // Merge: taxas salvas têm prioridade, mas garante que todas as moedas têm taxa padrão
+      const mergedRates = DEFAULT_RATES.map(defaultRate => {
+        const savedRate = saved.rates?.find(r => r.targetCurrency === defaultRate.targetCurrency);
+        return savedRate || defaultRate;
+      });
+      return { displayCurrency: saved.displayCurrency || "BRL", rates: mergedRates };
     }
 
+    // Primeira vez: inicializa o banco com taxas padrão
+    await saveToDB(defaults);
     return defaults;
   } catch (err) {
     console.error("[currencyService] Unexpected error loading:", err);
