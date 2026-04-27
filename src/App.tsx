@@ -16,6 +16,9 @@ import { BrandingProvider, useBrandingContext } from "@/contexts/BrandingContext
 // Currency Provider
 import { CurrencyProvider } from "@/contexts/CurrencyContext";
 
+// Trial Provider
+import { TrialProvider } from "@/contexts/TrialContext";
+
 // Error Boundary
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
@@ -97,6 +100,7 @@ const App = () => (
       <AuthProvider>
       <BrandingProvider>
       <CurrencyProvider>
+      <TrialProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -171,6 +175,7 @@ const App = () => (
           </Routes>
           </BrowserRouter>
         </TooltipProvider>
+      </TrialProvider>
       </CurrencyProvider>
       </BrandingProvider>
       </AuthProvider>

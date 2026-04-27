@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import { useUserSettings } from '@/hooks/useUserProfile';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrencyContext } from '@/contexts/CurrencyContext';
 import { supabase } from '@/lib/supabase';
 import { AppBreadcrumb } from '@/components/app/AppBreadcrumb';
 import { Button } from '@/components/ui/button';
@@ -45,6 +46,7 @@ export default function AppSettings() {
   const { resetOnboarding } = useOnboarding();
   const { signOut, user } = useAuth();
   const { theme, setTheme } = useTheme();
+  const { currentCurrency } = useCurrencyContext();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSavingPassword, setIsSavingPassword] = useState(false);
@@ -420,25 +422,16 @@ export default function AppSettings() {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-muted-foreground">Moeda padrão</Label>
-              <Select 
-                value={settings?.currency || 'BRL'} 
-                onValueChange={(v) => handleSelectChange('currency', v)}
-              >
-                <SelectTrigger className="glass-input">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {CURRENCY_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      <span className="flex items-center gap-2">
-                        <span className="font-mono text-muted-foreground">{opt.symbol}</span>
-                        {opt.label}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label className="text-muted-foreground">Moeda do sistema</Label>
+              <div className="p-3 rounded-xl glass-card flex items-center gap-2">
+                <span className="font-mono text-muted-foreground">
+                  {CURRENCY_OPTIONS.find(o => o.value === currentCurrency)?.symbol || 'R$'}
+                </span>
+                <span className="text-foreground font-medium">
+                  {CURRENCY_OPTIONS.find(o => o.value === currentCurrency)?.label || 'Real (R$)'}
+                </span>
+                <span className="ml-auto text-xs text-muted-foreground">Configurado pelo administrador</span>
+              </div>
             </div>
 
             <div className="space-y-2">

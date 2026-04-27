@@ -73,6 +73,8 @@ export function useUserSettings() {
   }, [loadSettings]);
 
   const updateSettings = useCallback(async (data: Partial<UserSettings>) => {
+    // Atualiza estado local imediatamente para UI responsiva
+    setSettings(prev => prev ? { ...prev, ...data } : data as UserSettings);
     const updated = await storage.updateSettings(data);
     if (updated?.settings) {
       setSettings(updated.settings);

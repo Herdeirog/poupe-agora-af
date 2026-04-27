@@ -18,6 +18,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { agentService, type EvolutionAPISettings } from "@/services/agentService";
 import { supabase } from "@/integrations/supabase/client";
 import { useBrandingContext, applyColorScheme } from "@/contexts/BrandingContext";
+import { saveTrialSettings } from "@/contexts/TrialContext";
 
 export default function AdminSettings() {
   const [searchParams] = useSearchParams();
@@ -128,10 +129,32 @@ export default function AdminSettings() {
 
   // Legacy checkWhatsappStatus function removed - using the one defined above with useCallback
 
-  const [trialSettings, setTrialSettings] = useState({
-    enabled: true,
-    days: 7,
-  });
+  const [trialSettings, setTrialSettings] = useState({ enabled: true, days: 7 });
+  const [savingTrial, setSavingTrial] = useState(false);
+
+  // Carrega trial do banco ao montar
+  useEffect(() => {
+    (supabase as any)
+      .from('global_settings')
+      .select('value')
+      .eq('key', 'trial_settings')
+      .maybeSingle()
+      .then(({ data }: any) => {
+        if (data?.value) setTrialSettings({ enabled: data.value.enabled ?? true, days: data.value.days ?? 7 });
+      });
+  }, []);
+
+  const handleSaveTrial = async () => {
+    setSavingTrial(true);
+    try {
+      await saveTrialSettings(trialSettings);
+      toast.success('Configurações de trial salvas!');
+    } catch (err) {
+      toast.error('Erro ao salvar configurações de trial');
+    } finally {
+      setSavingTrial(false);
+    }
+  };
 
   // Evolution API settings
   const [evolutionSettings, setEvolutionSettings] = useState<EvolutionAPISettings>({
@@ -1206,8 +1229,8 @@ export default function AdminSettings() {
               )}
 
               <div className="flex justify-end pt-4">
-                <Button className="bg-primary hover:bg-primary/90" onClick={() => toast.success("Configurações de trial salvas!")}>
-                  <Save className="mr-2 h-4 w-4" />
+                <Button className="bg-primary hover:bg-primary/90" onClick={handleSaveTrial} disabled={savingTrial}>
+                  {savingTrial ? <RefreshCw className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Salvar Configurações
                 </Button>
               </div>
